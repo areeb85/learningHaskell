@@ -10,7 +10,7 @@ import GHC.Core
 import Data.String
 import GHC.Core.Utils (exprType)
 --import GhcPlugins
-import Data.Text hiding (intercalate,map)
+import Data.Text hiding (intercalate,map, elem)
 import System.Console.Isocline
 import Control.Monad.Trans (liftIO)
 import Control.Monad.Trans.Class (lift)
@@ -81,57 +81,63 @@ loop guts dflags = do
     Just "foldInts" -> do
       mg_binds' <- everywhereM (mkM foldInts) (mg_binds guts)
       loop (guts { mg_binds = mg_binds' }) dflags
---    Just "substitute" -> do
---      let mg_binds' = everywhereM (mkM letSubstTrivial) (mg_binds guts)
---      loop (guts { mg_binds = mg_binds' }) dflags
+    Just "substitute" -> do
+      let mg_binds' = everywhere (mkT letSubstTrivial) (mg_binds guts)
+--      let mg_binds' = map (letSubstTrivial) (mg_binds guts)
+--      mg_binds' <- mapM mapBinding (mg_binds guts)
+      loop (guts { mg_binds = mg_binds' }) dflags
     Just unknown -> do
       liftIO $ putStrLn ("unknown command <" ++ unknown ++ ">")
       loop guts dflags
       
-      
---letSubstTrivial :: CoreExpr -> CoreExpr
---letSubstTrivial expr = case expr of
---  Let (NonRec b be@(Var _)) e -> substCoreExpr b be e
---  Let (NonRec b be@(Lit _)) e -> substCoreExpr b be e
---  _                           -> expr
+     
+     
+
+
+letSubstTrivial :: CoreExpr -> CoreExpr
+letSubstTrivial expr = case expr of
+  Let (NonRec b be@(Var _)) e -> substExprSC (extendSubst emptySubst b be) e
+  Let (NonRec b be@(Lit _)) e -> substExprSC (extendSubst emptySubst b be) e
+  _                           -> expr
     
 
---substCoreExpr :: CoreBndr -> CoreExpr -> CoreExpr -> CoreExpr
---substCoreExpr bndr expr (Var id)
---  | id == bndr = expr
---  | otherwise = Var id
---substCoreExpr bndr expr (Lit lit) = Lit lit
---substCoreExpr bndr expr (App fun arg) =
---  App (substCoreExpr bndr expr fun) (substCoreExpr bndr expr arg)
---substCoreExpr bndr expr (Lam bndr' body)
---  | bndr' == bndr = Lam bndr' body
---  | otherwise =
---    let body' = substCoreExpr bndr expr body
---    in Lam bndr' body'
---substCoreExpr bndr expr (Let bind body) =
---  let bind' = case bind of
---                NonRec bndr' expr' ->
---                  if bndr' == bndr then
---                    NonRec bndr' expr'
---                  else
---                    NonRec bndr' (substCoreExpr bndr expr expr')
---                Rec pairs ->
---                  Rec [(bndr', substCoreExpr bndr expr expr')
---                      | (bndr', expr') <- pairs]
---  in Let bind' (substCoreExpr bndr expr body)
---substCoreExpr bndr expr (Case scrut bndr' ty alts) =
---  let alts' = map (\(con, vars, body') ->
---                      let vars' = if bndr' `elem` vars then vars else bndr' : vars
---                          body'' = substCoreExpr bndr expr body'
---                      in (con, vars', body'')
---                  ) alts
---      scrut' = substCoreExpr bndr expr scrut
---  in Case scrut' bndr' ty alts'
---substCoreExpr bndr expr (Cast e c) =
---  Cast (substCoreExpr bndr expr e) c
---substCoreExpr bndr expr (Tick t e) =
---  Tick t (substCoreExpr bndr expr e)
---substCoreExpr bndr expr (Type ty) = Type ty
+
+substCoreExpr :: CoreBndr -> CoreExpr -> CoreExpr -> CoreExpr
+substCoreExpr bndr expr (Var id)
+  | id == bndr = expr
+  | otherwise = Var id
+substCoreExpr bndr expr (Lit lit) = Lit lit
+substCoreExpr bndr expr (App fun arg) =
+  App (substCoreExpr bndr expr fun) (substCoreExpr bndr expr arg)
+substCoreExpr bndr expr (Lam bndr' body)
+  | bndr' == bndr = Lam bndr' body
+  | otherwise =
+    let body' = substCoreExpr bndr expr body
+    in Lam bndr' body'
+substCoreExpr bndr expr (Let bind body) =
+  let bind' = case bind of
+                NonRec bndr' expr' ->
+                  if bndr' == bndr then
+                    NonRec bndr' expr'
+                  else
+                    NonRec bndr' (substCoreExpr bndr expr expr')
+                Rec pairs ->
+                  Rec [(bndr', substCoreExpr bndr expr expr')
+                      | (bndr', expr') <- pairs]
+  in Let bind' (substCoreExpr bndr expr body)
+substCoreExpr bndr expr (Case scrut bndr' ty alts) =
+  let alts' = map (\(con, vars, body') ->
+                      let vars' = if bndr' `elem` vars then vars else bndr' : vars
+                          body'' = substCoreExpr bndr expr body'
+                      in (con, vars', body'')
+                  ) alts
+      scrut' = substCoreExpr bndr expr scrut
+  in Case scrut' bndr' ty alts'
+substCoreExpr bndr expr (Cast e c) =
+  Cast (substCoreExpr bndr expr e) c
+substCoreExpr bndr expr (Tick t e) =
+  Tick t (substCoreExpr bndr expr e)
+substCoreExpr bndr expr (Type ty) = Type ty
 
 
 

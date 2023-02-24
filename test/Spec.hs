@@ -26,6 +26,8 @@ sampleMaybeBool2 val = case val of
   
 foldIntsTest = 3 + 4
 
+foo = let x = 4 in (show x) ++ (show x)
+
 --let f x = x + 1 in
 --  f 5
   
@@ -42,4 +44,4 @@ foldIntsTest = 3 + 4
 
 
   
-main = putStrLn ("Test suite not yet implemented haha" ++ show (factorial (foldIntsTest :: Int)) ++ sampleMaybeBool (Just True))
+main = putStrLn ("Test suite not yet implemented haha" ++ show (factorial (foldIntsTest :: Int)) ++ sampleMaybeBool (Just True) ++ foo ++ foo)
