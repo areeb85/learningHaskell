@@ -1,0 +1,77 @@
+name:                learningHaskell
+version:             0.1.0.0
+github:              "Github username here/learningHaskell"
+license:             BSD3
+author:              "Author name here"
+maintainer:          "Author email here"
+copyright:           "2019 Author name here"
+
+extra-source-files:
+- README.md
+- CHANGELOG.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            App category here
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/Github username here/learningHaskell#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- mtl >= 2.2.2
+- haskeline >= 0.8.2
+- transformers >= 0.5.6.2
+- pretty >= 1.1.3.6
+- exceptions >= 0.10.4
+- isocline >= 1.0.9
+#- linenoise >= 0.3.1
+- text >= 1.2.5.0
+- syb >= 0.7.2.2
+
+ghc-options:
+- -Wall
+- -Wcompat
+- -Widentities
+- -Wincomplete-record-updates
+- -Wincomplete-uni-patterns
+- -Wmissing-export-lists
+- -Wmissing-home-modules
+- -Wpartial-fields
+- -Wredundant-constraints
+
+library:
+  source-dirs: src
+  dependencies:
+    - ghc >= 9
+    #- syb
+    - base >= 4.7 && < 4.9
+    - containers >= 0.6.4.1
+    #- hermit == 1.0.1
+
+#executables:
+ # learningHaskell-exe:
+  #  main:                Main.hs
+  #  source-dirs:         app
+  #  ghc-options:
+  #  - -threaded
+#    - -rtsopts
+#    - -with-rtsopts=-N
+#    dependencies:
+#    - learningHaskell
+
+#executables:
+#  learningHaskell-test:
+#    main:                Spec.hs
+#    source-dirs:         test
+#    ghc-options:
+#    - -threaded
+##    - -rtsopts
+#    - -with-rtsopts=-N
+#    - -fplugin=Plugin
+#    -  -O0
+#    dependencies:
+#    - learningHaskell
+#    - ghc >= 9
