@@ -1,0 +1,98 @@
+[factorial [Occ=LoopBreaker] :: forall a. Integral a => a -> a
+ [LclId,
+  Unf=Unf{Src=<vanilla>, TopLvl=True, Value=True, ConLike=True,
+          WorkFree=True, Expandable=True, Guidance=IF_ARGS [30] 680 60}]
+ factorial
+   = \ (@a) ($dIntegral_a1pt :: Integral a) ->
+       let {
+         $dReal_a1q2 :: Real a
+         [LclId,
+          Unf=Unf{Src=<vanilla>, TopLvl=False, Value=False, ConLike=False,
+                  WorkFree=False, Expandable=True, Guidance=IF_ARGS [] 20 0}]
+         $dReal_a1q2 = $p1Integral @a $dIntegral_a1pt } in
+       let {
+         $dNum_a1q3 :: Num a
+         [LclId,
+          Unf=Unf{Src=<vanilla>, TopLvl=False, Value=False, ConLike=False,
+                  WorkFree=False, Expandable=True, Guidance=IF_ARGS [] 20 0}]
+         $dNum_a1q3 = $p1Real @a $dReal_a1q2 } in
+       let {
+         $dEq_a1pv :: Eq a
+         [LclId,
+          Unf=Unf{Src=<vanilla>, TopLvl=False, Value=False, ConLike=False,
+                  WorkFree=False, Expandable=True, Guidance=IF_ARGS [] 40 0}]
+         $dEq_a1pv = $p1Ord @a ($p2Real @a $dReal_a1q2) } in
+       \ (ds_d1rz :: a) ->
+         case == @a $dEq_a1pv ds_d1rz (fromInteger @a $dNum_a1q3 0) of {
+           False ->
+             * @a
+               $dNum_a1q3
+               ds_d1rz
+               (factorial
+                  @a
+                  $dIntegral_a1pt
+                  (- @a $dNum_a1q3 ds_d1rz (fromInteger @a $dNum_a1q3 1)));
+           True -> fromInteger @a $dNum_a1q3 1
+         };,
+ sampleBool :: Bool -> String
+ [LclId,
+  Unf=Unf{Src=<vanilla>, TopLvl=True, Value=True, ConLike=True,
+          WorkFree=True, Expandable=True, Guidance=IF_ARGS [70] 110 0}]
+ sampleBool
+   = \ (val :: Bool) ->
+       case val of {
+         False -> unpackCString# "False"#;
+         True -> unpackCString# "True"#
+       },
+ sampleMaybeBool [InlPrag=NOINLINE] :: Maybe Bool -> String
+ [LclId,
+  Unf=Unf{Src=<vanilla>, TopLvl=True, Value=True, ConLike=True,
+          WorkFree=True, Expandable=True, Guidance=IF_ARGS [50] 90 0}]
+ sampleMaybeBool
+   = \ (val :: Maybe Bool) ->
+       case val of {
+         Nothing -> unpackCString# "Nothing"#;
+         Just _ [Occ=Dead] -> sampleBool True
+       },
+ foo :: [Char]
+ [LclId,
+  Unf=Unf{Src=<vanilla>, TopLvl=True, Value=False, ConLike=False,
+          WorkFree=False, Expandable=False, Guidance=IF_ARGS [] 200 0}]
+ foo
+   = let {
+       x :: Integer
+       [LclId,
+        Unf=Unf{Src=<vanilla>, TopLvl=False, Value=True, ConLike=True,
+                WorkFree=True, Expandable=True, Guidance=IF_ARGS [] 100 0}]
+       x = 4 } in
+     ++
+       @Char
+       (show @Integer $fShowInteger x)
+       (show @Integer $fShowInteger x),
+ $trModule :: Module
+ [LclIdX,
+  Unf=Unf{Src=<vanilla>, TopLvl=True, Value=True, ConLike=True,
+          WorkFree=True, Expandable=True, Guidance=IF_ARGS [] 70 10}]
+ $trModule = Module (TrNameS "main"#) (TrNameS "Main"#),
+ main :: IO ()
+ [LclIdX,
+  Unf=Unf{Src=<vanilla>, TopLvl=True, Value=False, ConLike=False,
+          WorkFree=False, Expandable=False, Guidance=IF_ARGS [] 410 0}]
+ main
+   = putStrLn
+       (++
+          @Char
+          (unpackCString# "Test suite not yet implemented haha"#)
+          (++
+             @Char
+             (show
+                @Int
+                $fShowInt
+                (factorial @Int $fIntegralInt (+ @Int $fNumInt (I# 3#) (I# 4#))))
+             (++
+                @Char (sampleMaybeBool (Just @Bool True)) (++ @Char foo foo)))),
+ main :: IO ()
+ [LclIdX,
+  Unf=Unf{Src=<vanilla>, TopLvl=True, Value=False, ConLike=False,
+          WorkFree=False, Expandable=False, Guidance=IF_ARGS [] 20 0}]
+ main = runMainIO @() main]

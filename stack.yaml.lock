@@ -7,28 +7,28 @@ packages:
 - completed:
     hackage: mtl-2.2.2@sha256:1050fb71acd9f5d67da7d992583f5bd0eb14407b9dc7acc122af1b738b706ca3,2261
     pantry-tree:
-      size: 1713
       sha256: b8bdc2259e2f943a7252fb164805666fe108ac959d398e0af27b43ba2ebc241c
+      size: 1713
   original:
     hackage: mtl-2.2.2
 - completed:
     hackage: haskeline-0.8.2@sha256:3b4b594095d64f5fa199b07bdca7d6b790313ed7f380a1b061845507e6563880,6005
     pantry-tree:
-      size: 2955
       sha256: 17ee6b093c5135399b8e6bc3a63d9c6a4b0bc2100b495d2d974bc1464769de39
+      size: 2955
   original:
     hackage: haskeline-0.8.2
 - completed:
     hackage: ghc-lib-parser-9.4.1.20220807@sha256:8c2dba2248890f777594e6563348fcca40dd9bb46396ec6d138aaafd2e516249,14156
     pantry-tree:
-      size: 30972
       sha256: b5ae3f6da2da5144508135aa794bba526864a3dd9e927c377ec1a7c2ef0093c8
+      size: 30972
   original:
     hackage: ghc-lib-parser-9.4.1.20220807@sha256:8c2dba2248890f777594e6563348fcca40dd9bb46396ec6d138aaafd2e516249
 snapshots:
 - completed:
-    size: 619173
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/19/20.yaml
-    sha256: be747117bed6d462806c883352c3206325b23480825103f5c87884e97e52819a
+    sha256: adbc602422dde10cc330175da7de8609e70afc41449a7e2d6e8b1827aa0e5008
+    size: 649342
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/20/11.yaml
   original:
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/19/20.yaml
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/20/11.yaml
